@@ -54,18 +54,20 @@ StartInventory = function()
 			Blips = {}
 		end
 		for k, v in pairs(Config.Shops) do
-			if not v.type then v.type = Config.General end
-			if v.type and v.type.blip and (not v.job or v.job == ESX.PlayerData.job.name) then
-				local data = v.type
-				Blips[k] = AddBlipForCoord(v.coords.x, v.coords.y, v.coords.z)
-				SetBlipSprite(Blips[k], data.blip.id)
-				SetBlipDisplay(Blips[k], 4)
-				SetBlipScale(Blips[k], data.blip.scale)
-				SetBlipColour(Blips[k], data.blip.colour)
-				SetBlipAsShortRange(Blips[k], true)
-				BeginTextCommandSetBlipName('STRING')
-				AddTextComponentString(data.name)
-				EndTextCommandSetBlipName(Blips[k])
+			if (not Config.Shops[k].job or Config.Shops[k].job == ESX.PlayerData.job.name) then
+				local name, data = 'Shop'
+				if v.type then data = v.type.blip; name = v.name else data =  Config.General.blip end
+				if not data.hideBlip then
+					Blips[k] = AddBlipForCoord(v.coords.x, v.coords.y, v.coords.z)
+					SetBlipSprite(Blips[k], data.id)
+					SetBlipDisplay(Blips[k], 4)
+					SetBlipScale(Blips[k], data.scale)
+					SetBlipColour(Blips[k], data.colour)
+					SetBlipAsShortRange(Blips[k], true)
+					BeginTextCommandSetBlipName('STRING')
+					AddTextComponentString(name)
+					EndTextCommandSetBlipName(Blips[k])
+				end
 			end
 		end
 	end)
@@ -544,7 +546,15 @@ TriggerLoops = function()
 				if not id or type == 'shop' then
 					if id then
 						sleep = 5
-						DrawMarker(2, Config.Shops[id].coords.x,Config.Shops[id].coords.y,Config.Shops[id].coords.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.3, 0.2, 0.15, 30, 150, 30, 222, false, false, false, true, false, false, false)			
+						local color = Config.DefaultShopColor
+						if not Config.Shops[id].type then
+							DrawMarker(2, Config.Shops[id].coords.x,Config.Shops[id].coords.y,Config.Shops[id].coords.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.3, 0.2, 0.15, color[1], color[2], color[3], color[4], false, false, false, true, false, false, false)	
+						elseif Config.Shops[id].type and not Config.Shops[id].type.hideMarker then	
+							if Config.Shops[id].type.markerColor then
+								color = Config.Shops[id].type.markerColor
+							end
+							DrawMarker(2, Config.Shops[id].coords.x,Config.Shops[id].coords.y,Config.Shops[id].coords.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.3, 0.2, 0.15, color[1], color[2], color[3], color[4], false, false, false, true, false, false, false)
+						end							
 						local distance = #(playerCoords - Config.Shops[id].coords)
 						local name = Config.Shops[id].name or Config.Shops[id].type.name
 						if distance <= 1 then text='[~g~E~s~] '..name
@@ -552,8 +562,14 @@ TriggerLoops = function()
 								OpenShop(id)
 							end
 						elseif distance > 4 then id, type = nil, nil
-						else text = Config.Shops[id].name or Config.Shops[id].type.name end
-						if distance <= 2 then DrawText3D(Config.Shops[id].coords, text) end
+						else text = Config.Shops[id].name end
+						if distance <= 2 then 
+							if not Config.Shops[id].type then
+								DrawText3D(Config.Shops[id].coords, text) 
+							elseif Config.Shops[id].type and not Config.Shops[id].type.hideText then
+								DrawText3D(Config.Shops[id].coords, text) 
+							end
+						end
 					else
 						for k, v in pairs(Config.Shops) do
 							if v.coords and (not v.job or v.job == ESX.PlayerData.job.name) then
