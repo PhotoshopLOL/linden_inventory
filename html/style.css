@@ -439,6 +439,11 @@
     font-size: 90%;
 }
 
+.use-hover {
+    background-color: rgba(218, 0, 0, 0.2);
+}
+
+
 .give {
     position: relative;
     display: block;
@@ -456,6 +461,55 @@
     line-height: 40px;
     font-family: 'Signika';
     font-size: 90%;
+}
+
+.give-hover {
+    background-color: rgba(236, 219, 60, 0.2);
+}
+
+#dialogg {
+    top: 50%;
+    right:42.5%;
+    display: block;
+    position: fixed;
+    width: 150px;
+    text-align: center;
+    background-color: rgba(0,0,0, 0.8);
+    border-radius: 2px;
+    border-color:rgba(0, 0, 0, 0.2);
+    border-width: 1px;
+    margin: 0 auto;
+    transition: 0.5s ease-in-out all;
+}
+
+dialog {
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s;
+    display: block;
+    align-items: center;
+    justify-content: center;
+}
+
+dialog[open] {
+    opacity: 1;
+    pointer-events: inherit;
+}
+
+#nearPlayers{
+    transition: 0.5s ease-in-out all;
+}
+
+.ui-dialog-content {
+    padding-top:25px; 
+    padding-bottom:25px; 
+    border-radius:5px; 
+}
+
+.ui-dialog {
+    position:fixed;
+    top: 50%;
+    right: 42.5%;
 }
 
 .give:hover {
