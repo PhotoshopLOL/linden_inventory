@@ -574,7 +574,15 @@ TriggerLoops = function()
 				if not id or type == 'shop' then
 					if id then
 						sleep = 5
-						DrawMarker(2, Config.Shops[id].coords.x,Config.Shops[id].coords.y,Config.Shops[id].coords.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.3, 0.2, 0.15, 30, 150, 30, 222, false, false, false, true, false, false, false)			
+						local color = Config.DefaultShopColor
+						if not Config.Shops[id].type then
+							DrawMarker(2, Config.Shops[id].coords.x,Config.Shops[id].coords.y,Config.Shops[id].coords.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.3, 0.2, 0.15, color[1], color[2], color[3], color[4], false, false, false, true, false, false, false)	
+						elseif Config.Shops[id].type and not Config.Shops[id].type.hideMarker then	
+							if Config.Shops[id].type.markerColor then
+								color = Config.Shops[id].type.markerColor
+							end
+							DrawMarker(2, Config.Shops[id].coords.x,Config.Shops[id].coords.y,Config.Shops[id].coords.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.3, 0.2, 0.15, color[1], color[2], color[3], color[4], false, false, false, true, false, false, false)
+						end							
 						local distance = #(playerCoords - Config.Shops[id].coords)
 						local name = Config.Shops[id].name or Config.Shops[id].type.name
 						if distance <= 1 then text='[~g~E~s~] '..name
