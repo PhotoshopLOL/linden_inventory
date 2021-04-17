@@ -1,3 +1,34 @@
+
+--[[
+
+	ADDITIONAL CONFIGURATION FOR SHOPS:
+
+	blip.hideBlip 	= true   	-  hides blip on map
+	hideText 		= true   	- hides 3d text when nearby
+	hideMarker 		= true    	- hides marker (for illegal shit or something)
+	markerColor 	= {}		- RGBA values for custom marker color (ex. {200, 50, 50, 200})
+
+
+]]
+
+Config.DefaultShopColor = {30, 150, 30, 222}
+
+-- example
+Config.Blackmarket = {
+	
+	hideText = true,
+	hideMarker = false,
+	markerColor = {230, 30, 30, 30},
+	blip = {
+		id = 498,
+		colour = 2,
+		scale = 0.3,
+		hideBlip = true,
+	}, inventory = {
+		{ name = 'bread', price = 26 },
+	},
+}
+
 Config.General = {
 	name = 'Shop',
 	blip = {
