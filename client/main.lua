@@ -891,17 +891,6 @@ RegisterNUICallback('useItem', function(data, cb)
 	if data.inv == 'Playerinv' then TriggerEvent('linden_inventory:useItem', data.item) end
 end)
 
-RegisterNUICallback('giveItem', function(data, cb)
-	local closestPlayer, closestPlayerDistance = ESX.Game.GetClosestPlayer()
-	if closestPlayer == -1 or closestPlayerDistance > 2.0 then 
-		TriggerEvent('mythic_notify:client:SendAlert', {type = 'error', text = _U('nobody_nearby'), length = 2500})
-	elseif data.inv == 'Playerinv' then
-		if data.amount >= 1 then
-			TriggerServerEvent('linden_inventory:giveItem', data, GetPlayerServerId(closestPlayer))
-			TriggerEvent('randPickupAnim')
-		else TriggerEvent('mythic_notify:client:SendAlert', {type = 'error', text = _U('give_amount'), length = 2500}) end
-	end
-end)
 
 RegisterNUICallback('saveinventorydata',function(data)
 	TriggerServerEvent('linden_inventory:saveInventoryData', data)
