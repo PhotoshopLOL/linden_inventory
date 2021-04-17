@@ -116,8 +116,54 @@ window.addEventListener('message', function(event) {
 		HSN.Hotbar(event.data.items) 
 	}else if (event.data.message == "notify") {
 		HSN.NotifyItems(event.data.item,event.data.text)
+	}else if (event.data.message == "nearPlayers") {
+		HSN.GiveItems(event.data.item, event.data.players)
 	}
 })
+
+
+HSN.GiveItems = function(dItem, players) {
+	console.log("debug dialog open");
+	$("#nearPlayers").html("");
+	$.each(players, function (index, player) {
+		$("#nearPlayers").append('<button class="nearbyPlayerButton" data-player="' + player.player + '">' + player.label + ' (' + player.player + ')</button>');
+	});
+
+	$("#nearPlayers").append('<button class="nearbyPlayerButton">Close</button>');
+
+	$('.ui-dialog-content').css("padding-top:25px; padding-bottom:25px; border-radius:5px; width:250px; top:50px;")
+
+	$("#dialogg").dialog({
+		autoOpen: false,
+		show: 'fade',
+		hide: 'fade',
+		closeOnEscape: true,
+		position:'fixed',
+		top: '50px',
+	})
+
+	$("#dialogg").dialog('open');
+	$('.ui-dialog-titlebar').hide();
+	$('.close').fadeOut(500);
+	$('.give').fadeOut(500);
+	$('.use').fadeOut(500);
+	
+	$('.ui-dialog-content').css('padding-top:25px; padding-bottom:25px; border-radius:5px; width:200px; top:50px;')
+	//$('.ui-widget-content').css('padding-top:25px; padding-bottom:25px; border-radius:5px; width:200px; top:50px;')
+
+	$(".nearbyPlayerButton").click(function () {
+		$("#dialogg").dialog('close');
+		$('.close').fadeIn(500);
+		$('.use').fadeIn(500);
+		$('.give').fadeIn(500);
+		player = $(this).data("player");
+		$.post("https://linden_inventory/GiveItem", JSON.stringify({
+			player: player,
+			item: dItem,
+			number: parseInt($("#item-count").val())
+		}));
+	});
+}
 
 HSN.Hotbar = function(items) {
 	if (showhotbar == null) {
@@ -373,48 +419,51 @@ function DragAndDrop() {
 		},
 	
 	});
+
+
+	$(".use").droppable({
+		classes: {
+			"ui-droppable-hover": "give-hover"
+		},
+		drop: function(event, ui) {
+			setTimeout(function(){
+				IsDragging = false;
+			}, 300)
+			fromData = ui.draggable.data("ItemData");
+			fromInventory = ui.draggable.parent();
+			inv = fromInventory.data('invTier')
+				$.post("https://linden_inventory/useItem", JSON.stringify({
+					item: fromData,
+					inv: inv
+				}));
+				if (fromData.closeonuse) {
+					HSN.CloseInventory()
+				}
+		}
+	});
 }
 
-$(".use").droppable({
-	hoverClass: 'button-hover',
-	drop: function(event, ui) {
-		setTimeout(function(){
-			IsDragging = false;
-		}, 300)
-		fromData = ui.draggable.data("ItemData");
-		fromInventory = ui.draggable.parent();
-		inv = fromInventory.data('invTier')
-		$.post("https://linden_inventory/useItem", JSON.stringify({
-			item: fromData,
-			inv: inv
-		}));
-		if (fromData.closeonuse) {
-			HSN.CloseInventory()
-		}
-	}
-});
-
 $(".give").droppable({
-	hoverClass: 'button-hover',
+	classes: {
+		"ui-droppable-hover": "give-hover"
+	},
 	drop: function(event, ui) {
 		setTimeout(function(){
 			IsDragging = false;
 		}, 300)
 		fromData = ui.draggable.data("ItemData");
 		fromInventory = ui.draggable.parent();
-		count = parseInt($("#item-count").val()) || 0
-		inv = fromInventory.data('invTier')
+		inv = fromInventory.data('invTier');
 		if (fromData !== undefined) {
-			if (inv == 'Playerinv' && count >= 0) {
-				$.post("https://linden_inventory/giveItem", JSON.stringify({
-					item: fromData,
-					inv: inv,
-					amount: count
+			if (inv == 'Playerinv') {
+				$.post("https://linden_inventory/GetNearPlayers", JSON.stringify({
+					item: fromData
 				}));
 			}
 		}
 	}
 });
+
 
 $(document).on("click", ".ItemBoxes", function(e){
 	if ($(this).data("location") !== undefined) {
