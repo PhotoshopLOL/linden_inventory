@@ -145,18 +145,12 @@ HSN.GiveItems = function(dItem, players) {
 
 	$("#dialogg").dialog('open');
 	$('.ui-dialog-titlebar').hide();
-	$('.close').fadeOut(500);
-	$('.give').fadeOut(500);
-	$('.use').fadeOut(500);
 	
 	$('.ui-dialog-content').css('padding-top:25px; padding-bottom:25px; border-radius:5px; width:200px; top:50px;')
 	//$('.ui-widget-content').css('padding-top:25px; padding-bottom:25px; border-radius:5px; width:200px; top:50px;')
 
 	$(".nearbyPlayerButton").click(function () {
 		$("#dialogg").dialog('close');
-		$('.close').fadeIn(500);
-		$('.use').fadeIn(500);
-		$('.give').fadeIn(500);
 		player = $(this).data("player");
 		$.post("https://linden_inventory/GiveItem", JSON.stringify({
 			player: player,
