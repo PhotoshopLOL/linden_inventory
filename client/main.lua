@@ -56,18 +56,16 @@ StartInventory = function()
 		for k, v in pairs(Config.Shops) do
 			if (not Config.Shops[k].job or Config.Shops[k].job == ESX.PlayerData.job.name) then
 				local name, data = 'Shop'
-				if v.type then data = v.type.blip; name = v.name else data =  Config.General.blip end
-				if not data.hideBlip then
-					Blips[k] = AddBlipForCoord(v.coords.x, v.coords.y, v.coords.z)
-					SetBlipSprite(Blips[k], data.id)
-					SetBlipDisplay(Blips[k], 4)
-					SetBlipScale(Blips[k], data.scale)
-					SetBlipColour(Blips[k], data.colour)
-					SetBlipAsShortRange(Blips[k], true)
-					BeginTextCommandSetBlipName('STRING')
-					AddTextComponentString(name)
-					EndTextCommandSetBlipName(Blips[k])
-				end
+				if v.type then data = v.type.blip else data =  Config.General.blip end
+				Blips[k] = AddBlipForCoord(v.coords.x, v.coords.y, v.coords.z)
+				SetBlipSprite(Blips[k], data.id)
+				SetBlipDisplay(Blips[k], 4)
+				SetBlipScale(Blips[k], data.scale)
+				SetBlipColour(Blips[k], data.colour)
+				SetBlipAsShortRange(Blips[k], true)
+				BeginTextCommandSetBlipName('STRING')
+				AddTextComponentString(name)
+				EndTextCommandSetBlipName(Blips[k])
 			end
 		end
 	end)
@@ -574,15 +572,7 @@ TriggerLoops = function()
 				if not id or type == 'shop' then
 					if id then
 						sleep = 5
-						local color = Config.DefaultShopColor
-						if not Config.Shops[id].type then
-							DrawMarker(2, Config.Shops[id].coords.x,Config.Shops[id].coords.y,Config.Shops[id].coords.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.3, 0.2, 0.15, color[1], color[2], color[3], color[4], false, false, false, true, false, false, false)	
-						elseif Config.Shops[id].type and not Config.Shops[id].type.hideMarker then	
-							if Config.Shops[id].type.markerColor then
-								color = Config.Shops[id].type.markerColor
-							end
-							DrawMarker(2, Config.Shops[id].coords.x,Config.Shops[id].coords.y,Config.Shops[id].coords.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.3, 0.2, 0.15, color[1], color[2], color[3], color[4], false, false, false, true, false, false, false)
-						end							
+						DrawMarker(2, Config.Shops[id].coords.x,Config.Shops[id].coords.y,Config.Shops[id].coords.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.3, 0.2, 0.15, 30, 150, 30, 222, false, false, false, true, false, false, false)			
 						local distance = #(playerCoords - Config.Shops[id].coords)
 						local name = Config.Shops[id].name or Config.Shops[id].type.name
 						if distance <= 1 then text='[~g~E~s~] '..name
@@ -591,13 +581,7 @@ TriggerLoops = function()
 							end
 						elseif distance > 4 then id, type = nil, nil
 						else text = Config.Shops[id].name end
-						if distance <= 2 then 
-							if not Config.Shops[id].type then
-								DrawText3D(Config.Shops[id].coords, text) 
-							elseif Config.Shops[id].type and not Config.Shops[id].type.hideText then
-								DrawText3D(Config.Shops[id].coords, text) 
-							end
-						end
+						if distance <= 2 then DrawText3D(Config.Shops[id].coords, text) end
 					else
 						for k, v in pairs(Config.Shops) do
 							if v.coords and (not v.job or v.job == ESX.PlayerData.job.name) then
@@ -899,6 +883,16 @@ RegisterNUICallback('useItem', function(data, cb)
 	if data.inv == 'Playerinv' then TriggerEvent('linden_inventory:useItem', data.item) end
 end)
 
+RegisterNUICallback('giveItem', function(data, cb)
+	local closestPlayer, closestPlayerDistance = ESX.Game.GetClosestPlayer()
+	if closestPlayer == -1 or closestPlayerDistance > 2.0 then 
+		error('There is nobody nearby')
+	elseif data.inv == 'Playerinv' then
+		if data.amount >= 1 then
+			TriggerServerEvent('linden_inventory:giveItem', data, GetPlayerServerId(closestPlayer))
+		else error('You must enter an amount to give') end
+	end
+end)
 
 RegisterNUICallback('saveinventorydata',function(data)
 	TriggerServerEvent('linden_inventory:saveInventoryData', data)
