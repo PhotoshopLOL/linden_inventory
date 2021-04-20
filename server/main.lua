@@ -792,6 +792,23 @@ AddEventHandler('linden_inventory:giveItem', function(data, target)
 	end
 end)
 
+RegisterNetEvent('linden_inventory:giveItem')
+AddEventHandler('linden_inventory:giveItem', function(data, target)
+	local xPlayer = ESX.GetPlayerFromId(source)
+	local xTarget = ESX.GetPlayerFromId(target)
+	local xItem = xPlayer.getInventoryItem(data.item.name, data.item.metadata)
+	if data.amount > xItem.count then
+		TriggerClientEvent('mythic_notify:client:SendAlert', xPlayer.source, { type = 'error', text = 'You do not have enough '..data.item.label })
+	else
+		if canCarryItem(xTarget, data.item.name, data.amount, data.item.metadata) then
+			removeInventoryItem(xPlayer, data.item.name, data.amount, data.item.metadata, data.item.slot)
+			addInventoryItem(xTarget, data.item.name, data.amount, data.item.metadata)
+			exports.linden_logs:log(xPlayer, xTarget, 'has given '..data.item.count..'x '..data.item.name..' to', 'items')
+		else
+			TriggerClientEvent('mythic_notify:client:SendAlert', xPlayer.source, { type = 'error', text = 'Target can not carry '..data.amount..'x '..data.item.label })
+		end
+	end
+end)
 
 RegisterNetEvent('linden_inventory:reloadWeapon')
 AddEventHandler('linden_inventory:reloadWeapon', function(weapon)
