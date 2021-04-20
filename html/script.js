@@ -427,7 +427,7 @@ function DragAndDrop() {
 
 	$(".use").droppable({
 		classes: {
-			"ui-droppable-hover": "give-hover"
+			"ui-droppable-hover": "use-hover"
 		},
 		drop: function(event, ui) {
 			setTimeout(function(){
