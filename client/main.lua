@@ -56,16 +56,18 @@ StartInventory = function()
 		for k, v in pairs(Config.Shops) do
 			if (not Config.Shops[k].job or Config.Shops[k].job == ESX.PlayerData.job.name) then
 				local name, data = 'Shop'
-				if v.type then data = v.type.blip else data =  Config.General.blip end
-				Blips[k] = AddBlipForCoord(v.coords.x, v.coords.y, v.coords.z)
-				SetBlipSprite(Blips[k], data.id)
-				SetBlipDisplay(Blips[k], 4)
-				SetBlipScale(Blips[k], data.scale)
-				SetBlipColour(Blips[k], data.colour)
-				SetBlipAsShortRange(Blips[k], true)
-				BeginTextCommandSetBlipName('STRING')
-				AddTextComponentString(name)
-				EndTextCommandSetBlipName(Blips[k])
+				if v.type then data = v.type.blip; name = v.name else data =  Config.General.blip end
+				if not data.hideBlip then
+					Blips[k] = AddBlipForCoord(v.coords.x, v.coords.y, v.coords.z)
+					SetBlipSprite(Blips[k], data.id)
+					SetBlipDisplay(Blips[k], 4)
+					SetBlipScale(Blips[k], data.scale)
+					SetBlipColour(Blips[k], data.colour)
+					SetBlipAsShortRange(Blips[k], true)
+					BeginTextCommandSetBlipName('STRING')
+					AddTextComponentString(name)
+					EndTextCommandSetBlipName(Blips[k])
+				end
 			end
 		end
 	end)
@@ -581,7 +583,13 @@ TriggerLoops = function()
 							end
 						elseif distance > 4 then id, type = nil, nil
 						else text = Config.Shops[id].name end
-						if distance <= 2 then DrawText3D(Config.Shops[id].coords, text) end
+						if distance <= 2 then 
+							if not Config.Shops[id].type then
+								DrawText3D(Config.Shops[id].coords, text) 
+							elseif Config.Shops[id].type and not Config.Shops[id].type.hideText then
+								DrawText3D(Config.Shops[id].coords, text) 
+							end
+						end
 					else
 						for k, v in pairs(Config.Shops) do
 							if v.coords and (not v.job or v.job == ESX.PlayerData.job.name) then
