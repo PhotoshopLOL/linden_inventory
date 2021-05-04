@@ -32,3 +32,6 @@ Config.RandomPrices = false
 
 -- Show player identifier (often steamhex) on their id card
 Config.ShowIdentifierID = true
+
+-- Hotkey of your phone resource to disable opening it lol
+Config.PhoneHotkey = 288
