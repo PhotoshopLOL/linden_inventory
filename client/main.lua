@@ -236,6 +236,14 @@ AddEventHandler('linden_inventory:openInventory',function(data, rightinventory)
 		if not rightinventory then movement = true else movement = false end
 		SetNuiFocusAdvanced(true, true)
 		currentInventory = rightinventory
+
+		Citizen.CreateThread(function() ---------------------------------------------------------------------------------------------------------------------------------- disable opening phone when inventory is open
+			while invOpen do
+				Citizen.Wait(0)
+				DisableControlAction(0, Config.PhoneHotkey, true)
+			end
+		end)
+		
 	end
 end)
 
