@@ -627,7 +627,7 @@ TriggerLoops = function()
 					end
 				end
 				if Config.WeaponsLicense then
-					local coords, text, license = vector3(12.42198, -1105.82, 29.7854), "Weapons License", 'weapon'
+					local coords, text, license = Config.WeaponsLicenseCoords, "Weapons License", 'weapon'
 					local distance = #(playerCoords - coords)
 					if distance <= 5 then
 						sleep = 5
