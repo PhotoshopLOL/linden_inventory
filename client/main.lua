@@ -647,7 +647,7 @@ TriggerLoops = function()
 					end
 				end
 				if Config.WeaponsLicense then
-					local coords, text, license = vector3(12.42198, -1105.82, 29.7854), _U('weapon_license'), 'weapon'
+					local coords, text, license = Config.WeaponsLicenseCoords, "Weapons License", 'weapon'
 					local distance = #(playerCoords - coords)
 					if distance <= 5 then
 						sleep = 5
@@ -891,16 +891,6 @@ RegisterNUICallback('useItem', function(data, cb)
 	if data.inv == 'Playerinv' then TriggerEvent('linden_inventory:useItem', data.item) end
 end)
 
-RegisterNUICallback('giveItem', function(data, cb)
-	local closestPlayer, closestPlayerDistance = ESX.Game.GetClosestPlayer()
-	if closestPlayer == -1 or closestPlayerDistance > 2.0 then 
-		error('There is nobody nearby')
-	elseif data.inv == 'Playerinv' then
-		if data.amount >= 1 then
-			TriggerServerEvent('linden_inventory:giveItem', data, GetPlayerServerId(closestPlayer))
-		else error('You must enter an amount to give') end
-	end
-end)
 
 RegisterNUICallback('saveinventorydata',function(data)
 	TriggerServerEvent('linden_inventory:saveInventoryData', data)

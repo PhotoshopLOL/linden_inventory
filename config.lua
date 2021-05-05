@@ -17,6 +17,7 @@ Config.EnableBlur = true
 -- Requires esx_licenses
 Config.WeaponsLicense = true
 Config.WeaponsLicensePrice = 5000
+Config.WeaponsLicenseCoords = vector3(12.42198, -1105.82, 29.7854)
 
 -- Set the name of your logging resource, or false to disable
 Config.Logs = false --'linden_logs'
