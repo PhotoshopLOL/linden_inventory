@@ -1,7 +1,6 @@
 ESX = nil
 Items = {}
 Usables = {}
-Players = {}
 Drops = {}
 Inventories = {}
 Datastore = {}
@@ -9,6 +8,15 @@ Shops = {}
 Opened = {}
 Status = {'starting', ''}
 
+AddEventHandler('playerConnecting', function(name, setCallback, deferrals)
+	deferrals.defer()
+	Citizen.Wait(1000)
+	if Status[1] ~= 'ready' then
+		deferrals.done('Inventory system has not yet loaded')
+	else
+		deferrals.done()
+	end
+end)
 
 local failed = function(msg)
 	Status[1], Status[2] = 'error', msg
@@ -74,16 +82,14 @@ exports.ghmattimysql:ready(function()
 				if not Items[k] then
 					--print (' ('..k..', '..k..', 115, 1, 1, 1, NULL), ')
 					count = count + 1
-					for k, v in pairs(result) do
-						Items[k] = {
-							name = k,
-							label = k,
-							weight = 0,
-							stackable = 1,
-							description = 'Item not added to database',
-							closeonuse = 1
-						}
-					end
+					Items[k] = {
+						name = k,
+						label = k,
+						weight = 0,
+						stackable = 1,
+						description = 'Item not added to database',
+						closeonuse = 1
+					}
 				end
 			end
 			if count > 0 then message('Created '..count..' dummy items', 2) end
@@ -735,12 +741,15 @@ AddEventHandler('linden_inventory:devtool', function()
 end)
 
 RegisterNetEvent('linden_inventory:weaponMismatch')
-AddEventHandler('linden_inventory:weaponMismatch', function(hash)
+AddEventHandler('linden_inventory:weaponMismatch', function(weapon)
 	local xPlayer = ESX.GetPlayerFromId(source)
-	local weapon = ESX.GetWeaponFromHash(hash).name
-	if not Items[weapon] then TriggerBanEvent(xPlayer, 'using a '..weapon..' but item is invalid')
-	elseif xPlayer.getInventoryItem(weapon).count < 1 then
-		TriggerBanEvent(xPlayer, 'using a '..weapon..' but does not have any')
+	if xPlayer then
+		if Items[weapon] then
+			local count = getInventoryItem(xPlayer, weapon).count
+			if count < 1 then TriggerBanEvent(xPlayer, 'using "'..weapon..'" but item count is '..count) end
+		else
+			TriggerBanEvent(xPlayer, 'using "'..weapon..'" but item is invalid')
+		end
 	end
 end)
 
@@ -1074,7 +1083,6 @@ end, true, {help = 'open police evidence', validate = true, arguments = {
 ESX.RegisterCommand('clearevidence', 'user', function(xPlayer, args, showError)
 	if xPlayer.job.name == 'police' and xPlayer.job.grade_name == 'boss' then
 		local id = 'evidence-'..args.evidence
-		Stashes[id] = nil
 		exports.ghmattimysql:execute('DELETE FROM linden_inventory WHERE name = @name', {
 			['@name'] = id
 		})
@@ -1083,21 +1091,24 @@ end, true, {help = 'clear police evidence', validate = true, arguments = {
 	{name = 'evidence', help = 'number', type = 'number'}
 }})
 
+-- Confiscate inventory Command/Event
+ESX.RegisterCommand('confinv', 'superadmin', function(xPlayer, args, showError)
+	TriggerEvent('linden_inventory:confiscatePlayerInventory', args.playerId)
+end, true, {help = 'Confiscate an Inventory', validate = true, arguments = {
+	{name = 'playerId', help = 'player id', type = 'player'},
+}})
+
+-- Return Confiscated inventory Command/Event
+ESX.RegisterCommand('returninv', 'superadmin', function(xPlayer, args, showError)
+	TriggerEvent('linden_inventory:recoverPlayerInventory', args.playerId)
+end, true, {help = 'Return a Confiscated an Inventory', validate = true, arguments = {
+	{name = 'playerId', help = 'player id', type = 'player'},
+}})
 
 -- Close all inventories before restarting to be safe
 RegisterCommand('closeallinv', function(source, args, rawCommand)
 	if source > 0 then return end
 	TriggerClientEvent("linden_inventory:closeInventory", -1)
-end, true)
-
-
---Example commands
-RegisterCommand('conf', function(source, args, rawCommand)
-	TriggerEvent('linden_inventory:confiscatePlayerInventory', source)
-end, true)
-
-RegisterCommand('return', function(source, args, rawCommand)
-	TriggerEvent('linden_inventory:recoverPlayerInventory', source)
 end, true)
 
 RegisterCommand('maxweight', function(source, args, rawCommand)
