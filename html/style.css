@@ -209,7 +209,6 @@
 }
 
 
-
 .itemboxes-container {
     height: 130px;
     min-width: 110px;
@@ -232,8 +231,8 @@
     margin: 0.5px;
     width: 110px;
     height: 130px;
-    
-    background-color: rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    background-color: rgba(0, 0, 0, 0.3);
     border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
@@ -255,9 +254,99 @@
     margin: 1px;
     width: 110px;
     height: 110px;
-    
-    background-color: rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    background-color: rgba(0, 0, 0, 0.3);
     border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.hotbar-container > .hotslot-container:nth-child(1):after {
+    top: 0;
+    left: 0;
+    margin: 0 auto;
+    position: absolute;
+    content: '1';
+    height: 15px !important;
+    width: 15px !important;
+    font-size: 11px;
+    font-weight: bold;
+    font-family: "Basic";
+    text-align: center;
+    line-height: 14px;
+    vertical-align: middle;
+    background-color: white;
+    box-shadow: 0 0 0 1px black inset;
+}
+
+.hotbar-container > .hotslot-container:nth-child(2):after {
+    top: 0;
+    left: 0;
+    margin: 0 auto;
+    position: absolute;
+    content: '2';
+    height: 15px !important;
+    width: 15px !important;
+    font-size: 11px;
+    font-weight: bold;
+    font-family: "Basic";
+    text-align: center;
+    line-height: 14px;
+    vertical-align: middle;
+    background-color: white;
+    box-shadow: 0 0 0 1px black inset;
+}
+
+.hotbar-container > .hotslot-container:nth-child(3):after {
+    top: 0;
+    left: 0;
+    margin: 0 auto;
+    position: absolute;
+    content: '3';
+    height: 15px !important;
+    width: 15px !important;
+    font-size: 11px;
+    font-weight: bold;
+    font-family: "Basic";
+    text-align: center;
+    line-height: 14px;
+    vertical-align: middle;
+    background-color: white;
+    box-shadow: 0 0 0 1px black inset;
+}
+
+.hotbar-container > .hotslot-container:nth-child(4):after {
+    top: 0;
+    left: 0;
+    margin: 0 auto;
+    position: absolute;
+    content: '4';
+    height: 15px !important;
+    width: 15px !important;
+    font-size: 11px;
+    font-weight: bold;
+    font-family: "Basic";
+    text-align: center;
+    line-height: 14px;
+    vertical-align: middle;
+    background-color: white;
+    box-shadow: 0 0 0 1px black inset;
+}
+
+.hotbar-container > .hotslot-container:nth-child(5):after {
+    top: 0;
+    left: 0;
+    margin: 0 auto;
+    position: absolute;
+    content: '5';
+    height: 15px !important;
+    width: 15px !important;
+    font-size: 11px;
+    font-weight: bold;
+    font-family: "Basic";
+    text-align: center;
+    line-height: 14px;
+    vertical-align: middle;
+    background-color: white;
+    box-shadow: 0 0 0 1px black inset;
 }
 
 #itembox-action {
@@ -280,7 +369,7 @@
     max-width: 100%;
     max-height: 100%;
     bottom: -10px;
-
+    z-index: -1;
 }
 
 .hotslot-img img {
@@ -292,6 +381,7 @@
     max-width: 100%;
     max-height: 100%;
 	top: 5px;
+    z-index: -1;
 }
 
 #itembox-action > p {
