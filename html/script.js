@@ -378,7 +378,7 @@ function DragAndDrop() {
 		revertDuration: 0,
 		revert: "invalid",
 		cancel: ".itemdragclose",
-		containment: "body",
+		containment: "parent",
 		start: function(event, ui) {
 			IsDragging = true;
 			$(this).find("img").css("filter", "brightness(50%)");
