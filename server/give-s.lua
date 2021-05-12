@@ -5,7 +5,7 @@ AddEventHandler('hsn:giveInventoryItem', function(player2, itemType, item, itemC
     local xPlayer = ESX.GetPlayerFromId(source)
     local xPlayer2 = ESX.GetPlayerFromId(player2)
 
-    if itemCount <= 0 then
+    if itemCount <= 0 or xPlayer.getInventoryItem(item.name).count < itemCount then
 
         xPlayer.showNotification("~r~ Invalid amount.")
 
@@ -17,6 +17,7 @@ AddEventHandler('hsn:giveInventoryItem', function(player2, itemType, item, itemC
         xPlayer.showNotification("You gave ~b~" .. itemCount .. 'x ~g~' ..  item.label .. '~w~ to ' .. xPlayer2.getName())
         xPlayer2.showNotification("You recieved ~b~" .. itemCount .. 'x ~g~' ..  item.label .. '~w~ from ' .. xPlayer2.getName())
 
+        exports.discord_logs:log(xPlayer, xPlayer2, 'has given '.. itemCount ..'x '..item.name..' to ', 'items')
 
     elseif xPlayer2.canCarryItem(item.name, itemCount) then
 
@@ -30,6 +31,8 @@ AddEventHandler('hsn:giveInventoryItem', function(player2, itemType, item, itemC
     
             xPlayer.showNotification("You gave ~b~" .. itemCount .. 'x ~g~' ..  item.label .. '~w~ to ' .. xPlayer2.getName())
             xPlayer2.showNotification("You recieved ~b~" .. itemCount .. 'x ~g~' ..  item.label .. '~w~ from ' .. xPlayer2.getName())
+
+            exports.discord_logs:log(xPlayer, xPlayer2, 'has given '.. itemCount ..'x '..item.name..' to ', 'items')
             
         end
     

@@ -26,7 +26,6 @@ RegisterNUICallback(
         if not foundPlayers then
             ESX.ShowNotification("~r~No players around to give.", true, true)
         else
-            --print(json.encode(elements))
             SendNUIMessage(
                 {
                     message = "nearPlayers",
