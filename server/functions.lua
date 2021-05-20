@@ -1,6 +1,6 @@
 GetPlayerIdentification = function(xPlayer)
 	local sex, identifier = xPlayer.get('sex')
-	if sex == 'm' then sex = 'Male' elseif sex == 'f' then sex = 'Female' end
+	if sex == 'm' then sex = _U('male') elseif sex == 'f' then sex = _U('female') end
 	if Config.ShowIdentifierID then identifier = ' ('..xPlayer.getIdentifier()..')' else identifier = '' end
 	return ('Sex: %s | DOB: %s%s'):format( sex, xPlayer.get('dateofbirth'), identifier )
 end
@@ -106,6 +106,9 @@ end
 ItemNotify = function(xPlayer, item, count, slot, type)
 	local xItem = Items[item.name]
 	if xPlayer and xItem then
+		if type == 'removed' and item.name == 'radio' and xPlayer.getInventoryItem('radio').count <= 1 then
+			--TriggerClientEvent('turnoffradio', xPlayer.source)
+		end
 		TriggerClientEvent('linden_inventory:itemNotify', xPlayer.source, item, count, slot, type)
 	end
 end
@@ -132,7 +135,7 @@ CreateNewDrop = function(xPlayer, data)
 	if data.type == 'freeslot' then
 		if ValidateItem(data.type, xPlayer, Inventories[invid2].inventory[data.emptyslot], Drops[invid].inventory[data.toSlot], data.item, data.item) == true then
 			local count = Inventories[invid2].inventory[data.emptyslot].count
-			ItemNotify(xPlayer, data.item, count, data.emptyslot, _U('removed'))
+			ItemNotify(xPlayer, data.item, count, data.emptyslot, 'removed')
 			Inventories[invid2].inventory[data.emptyslot] = nil
 			Drops[invid].inventory[data.toSlot] = {name = data.item.name, label = data.item.label, weight = data.item.weight, slot = data.toSlot, count = data.item.count, description = data.item.description, metadata = data.item.metadata, stackable = data.item.stackable, closeonuse = Items[data.item.name].closeonuse}
 			if Config.Logs then
@@ -143,7 +146,7 @@ CreateNewDrop = function(xPlayer, data)
 		end
 	elseif data.type == 'split' then
 		if ValidateItem(data.type, xPlayer, Inventories[invid2].inventory[data.fromSlot], Drops[invid].inventory[data.toSlot], data.oldslotItem, data.newslotItem) == true then
-			ItemNotify(xPlayer, data.newslotItem, data.newslotItem.count, data.fromSlot, _U('removed'))
+			ItemNotify(xPlayer, data.newslotItem, data.newslotItem.count, data.fromSlot, 'removed')
 			Inventories[invid2].inventory[data.fromSlot] = {name = data.oldslotItem.name, label = data.oldslotItem.label, weight = data.oldslotItem.weight, slot = data.fromSlot, count = data.oldslotItem.count, description = data.oldslotItem.description, metadata = data.oldslotItem.metadata, stackable = data.oldslotItem.stackable, closeonuse = Items[data.oldslotItem.name].closeonuse}
 			Drops[invid].inventory[data.toSlot] = {name = data.newslotItem.name, label = data.newslotItem.label, weight = data.newslotItem.weight, slot = data.toSlot, count = data.newslotItem.count, description = data.newslotItem.description, metadata = data.newslotItem.metadata, stackable = data.newslotItem.stackable, closeonuse = Items[data.newslotItem.name].closeonuse}
 			if Config.Logs then
