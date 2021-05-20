@@ -10,14 +10,12 @@ var showhotbar = null
 var HSN = []
 var rightinvtype = null
 var rightinventory = null
-var rightgrade = 0
 var maxWeight = 0
 var rightmaxWeight = 0
 var playerfreeweight = 0
 var rightfreeweight = 0
 var availableweight = 0
 var element = new Image;
-var job = []
 
 var weightFormat = function(num, parenthesis, showZero) {
 	if (parenthesis == false) {
@@ -56,7 +54,7 @@ var gram = Intl.NumberFormat('en-US', {
 
 var money = Intl.NumberFormat('en-US', {
 	style: 'currency',
-	currency: 'USD',
+	currency: 'JPY',
 	minimumFractionDigits: 0
 });
 
@@ -86,6 +84,8 @@ Display = function(bool) {
 			$.when($inventory.fadeOut(200)).done(function() {
 				$(".item-slot").remove();
 				$(".ItemBoxes").remove();
+				$("#dialogg").hide();
+				$('#nearPlayers').empty();
 				$('.inventory-main').hide()
 				$('.inventory-main-rightside').removeData("invId")
 				$('.inventory-main-rightside').removeData("invTier")
@@ -124,38 +124,33 @@ window.addEventListener('message', function(event) {
 
 
 HSN.GiveItems = function(dItem, players) {
-	console.log("debug dialog open");
-	$("#nearPlayers").html("");
+
+	$('#nearPlayers').empty();
+
+	var itemCount 
+
+	if ($("#item-count").val() == 0) {
+		itemCount = dItem.count;
+	} else {
+		itemCount = Number($("#item-count").val());
+	}
+
 	$.each(players, function (index, player) {
 		$("#nearPlayers").append('<button class="nearbyPlayerButton" data-player="' + player.player + '">' + player.label + ' (' + player.player + ')</button>');
 	});
 
 	$("#nearPlayers").append('<button class="nearbyPlayerButton">Close</button>');
 
-	$('.ui-dialog-content').css("padding-top:25px; padding-bottom:25px; border-radius:5px; width:250px; top:50px;")
-
-	$("#dialogg").dialog({
-		autoOpen: false,
-		show: 'fade',
-		hide: 'fade',
-		closeOnEscape: true,
-		position:'fixed',
-		top: '50px',
-	})
-
-	$("#dialogg").dialog('open');
-	$('.ui-dialog-titlebar').hide();
-	
-	$('.ui-dialog-content').css('padding-top:25px; padding-bottom:25px; border-radius:5px; width:200px; top:50px;')
-	//$('.ui-widget-content').css('padding-top:25px; padding-bottom:25px; border-radius:5px; width:200px; top:50px;')
+	$("#dialogg").fadeIn();
 
 	$(".nearbyPlayerButton").click(function () {
-		$("#dialogg").dialog('close');
+		$("#dialogg").fadeOut();
+		$('#nearPlayers').empty();
 		player = $(this).data("player");
 		$.post("https://linden_inventory/GiveItem", JSON.stringify({
 			player: player,
 			item: dItem,
-			number: parseInt($("#item-count").val())
+			number: itemCount
 		}));
 	});
 }
@@ -264,7 +259,6 @@ HSN.RemoveItemFromSlot = function(inventory,slot) {
 
 HSN.SetupInventory = function(data) {
 	maxWeight = data.maxWeight
-	job = data.job
 	$('.playername').html(data.name)
 	for(i = 1; i <= (data.slots); i++) {
 		$(".inventory-main-leftside").find("[inventory-slot=" + i + "]").remove();
@@ -296,11 +290,9 @@ HSN.SetupInventory = function(data) {
 
 	$(".leftside-weight").html(weightFormat(totalkg/1000, false, true) + '/'+ weightFormat(maxWeight/1000, false))
 	if (data.rightinventory !== undefined) {
-		rightinventory = data.rightinventory.id
-		rightgrade = 0
-		if (data.rightinventory.grade) { rightgrade = data.rightinventory.grade }
 		$('.inventory-main-rightside').data("invTier", data.rightinventory.type)
-		$('.inventory-main-rightside').data("invId", rightinventory)
+		$('.inventory-main-rightside').data("invId", data.rightinventory.name)
+		rightinventory = data.rightinventory.name
 		rightinvtype = data.rightinventory.type
 		rightmaxWeight = data.rightinventory.maxWeight || (data.rightinventory.slots*8000).toFixed(0)
 		righttotalkg = 0
@@ -310,6 +302,7 @@ HSN.SetupInventory = function(data) {
 				$(".inventory-main-rightside").append('<div class="ItemBoxes" inventory-slot=' + i +'></div> ')
 			}
 			if (data.rightinventory.type == 'shop') {
+				rightinventory = data.rightinventory.name
 				var currency = data.rightinventory.currency
 				$.each(data.rightinventory.inventory, function (i, item) {
 					if (item != null) {
@@ -375,23 +368,18 @@ function DragAndDrop() {
 	$("img").on("error", function() {
 		$(this).hide();
 	});
-		
+	
 	$(".drag-item").draggable({
 		helper: 'clone',
 		appendTo: ".inventory-main",
 		revertDuration: 0,
+		revert: "invalid",
 		cancel: ".itemdragclose",
 		containment: "parent",
 		start: function(event, ui) {
-			var inv = $(this).parent().data('invTier')
-			if (inv !== 'Playerinv' && rightgrade > job.grade) {
-				HSN.InventoryMessage('stash_lowgrade', 2)
-				return false
-			} else {
-				IsDragging = true;
-				$(this).find("img").css("filter", "brightness(50%)");
-				count = $("#item-count").val();
-			}
+			IsDragging = true;
+			$(this).find("img").css("filter", "brightness(50%)");
+			count = $("#item-count").val();
 		},
 		stop: function() {
 			setTimeout(function(){
@@ -497,6 +485,8 @@ $(document).on("mouseenter", ".ItemBoxes", function(e){
 		if (Item.metadata) {
 			if (Item.metadata.type) { $(".iteminfo-description").append('<p>'+Item.metadata.type+'</p>')}
 			if (Item.metadata.description) { $(".iteminfo-description").append('<p>'+Item.metadata.description+'</p>')}
+			if (Item.metadata.label) { $(".iteminfo-description").append('<p>Label: '+Item.metadata.label+'</p>')}
+				if (Item.metadata.note) { $(".iteminfo-description").append('<p>Note: '+Item.metadata.note+'</p>')}
 			if ((Item.name).split("_")[0] == "WEAPON" && Item.metadata.durability !== undefined) {
 				if (Item.metadata.ammo !== undefined) { $(".iteminfo-description").append('<p>Weapon Ammo: '+Item.metadata.ammo+'</p>') }
 				if (Item.metadata.durability !== undefined) { $(".iteminfo-description").append('<p>Durability: '+parseInt(Item.metadata.durability).toFixed(0)+''+'%</p>') }
@@ -787,10 +777,11 @@ SwapItems = function(fromInventory, toInventory, fromSlot, toSlot) {
 				}
 			}
 		} else {
-			HSN.InventoryMessage('cannot_perform', 2)
+			HSN.InventoryMessage('You can not perform this action', 2)
 		}
 	} else {
-		if (inv2 == 'Playerinv') { HSN.InventoryMessage('cannot_carry', 2) } else { HSN.InventoryMessage('cannot_carry_other', 2) }
+		if (inv2 == 'Playerinv') { HSN.InventoryMessage('You can not carry that much', 2) } else { HSN.InventoryMessage('Target inventory can not hold that much', 2) }
 	}
 	DragAndDrop()
 }
+

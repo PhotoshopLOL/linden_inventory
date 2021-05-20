@@ -14,6 +14,15 @@ AddEventHandler('linden_inventory:mustard', function()
 	TriggerEvent('mythic_notify:client:SendAlert', {type = 'inform', text = 'You.. drank mustard', length = 2500})
 end)
 
+AddEventHandler('linden_inventory:water', function()
+	TriggerEvent('mythic_notify:client:SendAlert', {type = 'inform', text = 'You drank some refreshing water', length = 2500})
+end)
+
+AddEventHandler('linden_inventory:milk', function()
+	TriggerEvent('esx_status:remove', 'drug_intoxication', 600)
+	TriggerEvent('mythic_notify:client:SendAlert', {type = 'inform', text = 'You drank some refreshing milk', length = 2500})
+end)
+
 AddEventHandler('linden_inventory:bandage', function()
 	local maxHealth = 200
 	local health = GetEntityHealth(playerPed)
@@ -22,6 +31,6 @@ AddEventHandler('linden_inventory:bandage', function()
 end)
 
 AddEventHandler('linden_inventory:armour', function()
-	SetPlayerMaxArmour(playerID, 100)
+	SetPlayerMaxArmour(PlayerId(), 100)
 	SetPedArmour(playerPed, 100)
 end)

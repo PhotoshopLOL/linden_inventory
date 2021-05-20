@@ -1,6 +1,4 @@
 Locales['de'] = {
-	['male'] = "Männlich",
-	['female'] = "Weiblich",
 	['used'] = "Benutzt",
 	['removed'] = "Entfernt",
 	['added'] = "Hinzugefügt",
