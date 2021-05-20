@@ -111,6 +111,8 @@ Config.Ammos = {
 		`WEAPON_GUSENBERG`,
 		`WEAPON_HEAVYPISTOL`,
 		`WEAPON_MICROSMG`,
+		`WEAPON_SNSPISTOL`,
+		`WEAPON_SNSPISTOL_MK2`
 	},
 
 	['ammo-9'] = { -- 9mm variants (parabellum, makarov, etc)
@@ -124,9 +126,7 @@ Config.Ammos = {
 		`WEAPON_SMG`,
 		`WEAPON_SMG_MK2`,
 		`WEAPON_VINTAGEPISTOL`,
-		`WEAPON_CERAMICPISTOL`,
-		`WEAPON_SNSPISTOL`,
-		`WEAPON_SNSPISTOL_MK2`
+		`WEAPON_CERAMICPISTOL`
 	},
 
 	['ammo-flare'] = {
