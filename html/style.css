@@ -589,8 +589,7 @@
     right:42.5%;
     display: block;
     position: fixed;
-    width: 250px;
-    height: fit-content;
+    width: 150px;
     text-align: center;
     background-color: rgba(0,0,0, 0.8);
     border-radius: 2px;
@@ -612,28 +611,6 @@ dialog {
 dialog[open] {
     opacity: 1;
     pointer-events: inherit;
-}
-
-.nearbyPlayerButton {
-
-    color: white;
-    position: relative;
-    top: 40%;
-    display: block;
-    width: 150px;
-    height: 35px;
-    text-align: center;
-    box-shadow: 0 0 0 1px rgba(38, 38, 38, 0.3) inset;
-    margin: 0 auto;
-    margin-bottom: 5px;
-    margin-top: 5px;
-    transition: 0.5s ease-in-out all;
-
-    border: white;
-    border-width: thick;
-    background-color: gray;
-    border-radius: 2px;
-
 }
 
 #nearPlayers{
@@ -707,4 +684,3 @@ input[type=number]::-webkit-outer-spin-button {
 .ui-draggable-dragging .keybind {
     display: none;
 }
-
