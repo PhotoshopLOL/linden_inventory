@@ -230,6 +230,14 @@ end
 RegisterNetEvent('linden_inventory:openInventory')
 AddEventHandler('linden_inventory:openInventory',function(data, rightinventory)
 	if CanOpenInventory() then
+
+		Citizen.CreateThread(function() ---------------------------------------------------------------------------------------------------------------------------------- disable opening phone when inventory is open
+			while invOpen do
+				Citizen.Wait(0)
+				DisableControlAction(0, Config.PhoneHotkey, true)
+			end
+		end)
+
 		movement = false
 		invOpen = true
 		if rightinventory then
@@ -250,13 +258,6 @@ AddEventHandler('linden_inventory:openInventory',function(data, rightinventory)
 		if not rightinventory then movement = true else movement = false end
 		SetNuiFocusAdvanced(true, true)
 		currentInventory = rightinventory
-
-		Citizen.CreateThread(function() ---------------------------------------------------------------------------------------------------------------------------------- disable opening phone when inventory is open
-			while invOpen do
-				Citizen.Wait(0)
-				DisableControlAction(0, Config.PhoneHotkey, true)
-			end
-		end)
 		
 	end
 end)
@@ -574,7 +575,9 @@ TriggerLoops = function()
 				if not id or type == 'shop' then
 					if id then
 						sleep = 5
-						DrawMarker(2, Config.Shops[id].coords.x,Config.Shops[id].coords.y,Config.Shops[id].coords.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.3, 0.2, 0.15, 30, 150, 30, 222, false, false, false, true, false, false, false)			
+						local c = {30, 150, 30, 222}
+						if Config.Shops[id].type.markerColor then c = Config.Shops[id].type.markerColor end
+						DrawMarker(2, Config.Shops[id].coords.x,Config.Shops[id].coords.y,Config.Shops[id].coords.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.3, 0.2, 0.15, c[1],c[2],c[3],c[4], false, false, false, true, false, false, false)			
 						local distance = #(playerCoords - Config.Shops[id].coords)
 						local name = Config.Shops[id].name or Config.Shops[id].type.name
 						if distance <= 1 then text='[~g~E~s~] '..name
@@ -635,7 +638,7 @@ TriggerLoops = function()
 							local distance = #(playerCoords - v.coords)
 							if distance <= 8 then
 								sleep = 5
-								DrawMarker(2, v.coords.x,v.coords.y,v.coords.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.3, 0.2, 0.15, 150, 30, 30, 222, false, false, false, true, false, false, false)
+								DrawMarker(2, v.coords.x,v.coords.y,v.coords.z-0.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.15, 0.15, 0.1, 206, 208, 72, 255, false, false, false, true, false, false, false)
 								if distance <= 2 and (closestDrop == nil or (currentDrop and closestDrop and distance < currentDrop.distance)) then
 									closestDrop = {name = v.name, distance = distance}
 								end
@@ -874,7 +877,7 @@ RegisterCommand('weapondetails', function()
 	end
 end)
 
-RegisterCommand('-nui', function()
+RegisterCommand('-inv', function()
 	TriggerEvent('linden_inventory:closeInventory')
 end)
 

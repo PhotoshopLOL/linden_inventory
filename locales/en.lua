@@ -33,4 +33,6 @@ Locales['en'] = {
 	['item_not_enough'] = "You do not have enough %s",
 	['cannot_afford'] = "You can not afford that (missing %s)",
 	['stash_lowgrade'] = "You are not authorised to take this item",
+	['You can not carry that much'] = 'You cannot carry that much.',
+	['You can not perform this action'] = 'You can not perform this action.',
 }

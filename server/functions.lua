@@ -51,6 +51,7 @@ RandomDropId = function()
 	end
 end
 
+
 setMetadata = function(metadata)
 	local data = metadata
 	if data == nil then data = {}

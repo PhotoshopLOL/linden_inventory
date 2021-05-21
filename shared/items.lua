@@ -1,4 +1,125 @@
 Config.ItemList = {
+
+
+	['burger'] = {
+		hunger = 5000,
+		thirst = -5000,
+		animDict = 'mp_player_inteat@burger',
+		anim = 'mp_player_int_eat_burger_fp',
+		model = 'prop_cs_burger_01',
+		coords = { x = 0.02, y = 0.022, z = -0.02 },
+		rotation = { x = 0.0, y = 5.0, z = 0.0 },
+		useTime = 2500,
+		event = 'linden_inventory:burger'
+	},
+
+	['milk'] = {
+		thirst = 5000,
+		animDict = 'mp_player_intdrink',
+		anim = 'loop_bottle',
+		model = 'prop_ld_flow_bottle',
+		coords = { x = 0.03, y = 0.0, z = 0.02 },
+		rotation = { x = 0.0, y = -13.5, z = -1.5 },
+		useTime = 2500,
+		event = 'linden_inventory:milk'
+	},
+
+	['water'] = {
+		thirst = 5000,
+		animDict = 'mp_player_intdrink',
+		anim = 'loop_bottle',
+		model = 'prop_ld_flow_bottle',
+		coords = { x = 0.03, y = 0.0, z = 0.02 },
+		rotation = { x = 0.0, y = -13.5, z = -1.5 },
+		useTime = 2500,
+		event = 'linden_inventory:water'
+	},
+
+	['cola'] = {
+		thirst = 5000,
+		animDict = 'mp_player_intdrink',
+		anim = 'loop_bottle',
+		model = 'prop_ecola_can',
+		coords = { x = 0.01, y = 0.0, z = 0.06 },
+		rotation = { x = 5.0, y = -1.5, z = -180.5 },
+		useTime = 2500,
+		event = 'linden_inventory:cola'
+	},
+
+	['bread'] = {
+		hunger = 5000,
+		thirst = -5000,
+		animDict = 'mp_player_inteat@burger',
+		anim = 'mp_player_int_eat_burger_fp',
+		model = 'prop_cs_burger_01',
+		coords = { x = 0.02, y = 0.022, z = -0.02 },
+		rotation = { x = 0.0, y = 5.0, z = 0.0 },
+		useTime = 2500,
+		event = 'linden_inventory:bread'
+	},
+
+	['pringles'] = {
+		hunger = 5000,
+		thirst = -5000,
+		animDict = 'mp_player_inteat@burger',
+		anim = 'mp_player_int_eat_burger_fp',
+		model = 'v_ret_ml_chips3',
+		coords = { x = 0.02, y = 0.022, z = -0.02 },
+		rotation = { x = 0.0, y = 5.0, z = 0.0 },
+		useTime = 2500,
+	},
+
+	['chips'] = {
+		hunger = 5000,
+		thirst = -5000,
+		animDict = 'mp_player_inteat@burger',
+		anim = 'mp_player_int_eat_burger_fp',
+		model = 'v_ret_ml_chips2',
+		coords = { x = 0.02, y = 0.022, z = -0.02 },
+		rotation = { x = 0.0, y = 5.0, z = 0.0 },
+		useTime = 2500,
+	},
+
+	['chocolate'] = {
+		hunger = 5000,
+		thirst = -5000,
+		stress = -50000,
+		animDict = 'mp_player_inteat@burger',
+		anim = 'mp_player_int_eat_burger_fp',
+		model = 'prop_choc_ego',
+		coords = { x = 0.02, y = 0.022, z = -0.02 },
+		rotation = { x = 0.0, y = 5.0, z = 0.0 },
+		useTime = 2500,
+	},
+
+	['candy'] = {
+		hunger = 5000,
+		thirst = -1000,
+		stress = -20000,
+		animDict = 'mp_player_inteat@burger',
+		anim = 'mp_player_int_eat_burger_fp',
+		model = 'ng_proc_candy01a',
+		coords = { x = 0.02, y = 0.022, z = -0.02 },
+		rotation = { x = 0.0, y = 5.0, z = 0.0 },
+		useTime = 2500,
+	},
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	---------------- ATTACHMENTS
+
 	['at_flashlight_pistol'] = { component = {`COMPONENT_AT_PI_FLSH`}, useTime = 2500 },
 	['at_flashlight_rifle'] = { component = {`COMPONENT_AT_AR_FLSH`}, useTime = 2500 },
 	['at_flashlight_shotgun'] = { component = {`COMPONENT_AT_AR_FLSH`}, useTime = 2500 },
@@ -115,70 +236,5 @@ Config.ItemList = {
 	['at_skin_sniper_boom'] = { component = {`COMPONENT_HEAVYSNIPER_MK2_CAMO_10`, `COMPONENT_MARKSMANRIFLE_MK2_CAMO_10`}, useTime = 2500 },
 	['at_skin_sniper_patriotic'] = { component = {`COMPONENT_HEAVYSNIPER_MK2_CAMO_IND_01`, `COMPONENT_MARKSMANRIFLE_MK2_CAMO_IND_01`}, useTime = 2500 },
 	['at_skin_sniper_gold'] = { component = {`COMPONENT_MARKSMANRIFLE_VARMOD_LUXE`}, useTime = 2500 },
-
-	['burger'] = {
-		hunger = 200000,
-		animDict = 'mp_player_inteat@burger',
-		anim = 'mp_player_int_eat_burger_fp',
-		model = 'prop_cs_burger_01',
-		coords = { x = 0.02, y = 0.022, z = -0.02 },
-		rotation = { x = 0.0, y = 5.0, z = 0.0 },
-		useTime = 2500,
-		event = 'linden_inventory:burger'
-	},
-
-	['water'] = {
-		thirst = 200000,
-		animDict = 'mp_player_intdrink',
-		anim = 'loop_bottle',
-		model = 'prop_ld_flow_bottle',
-		coords = { x = 0.03, y = 0.0, z = 0.02 },
-		rotation = { x = 0.0, y = -13.5, z = -1.5 },
-		useTime = 2500,
-		event = 'linden_inventory:water'
-	},
-
-	['cola'] = {
-		thirst = 200000,
-		animDict = 'mp_player_intdrink',
-		anim = 'loop_bottle',
-		model = 'prop_ecola_can',
-		coords = { x = 0.01, y = 0.0, z = 0.06 },
-		rotation = { x = 5.0, y = -1.5, z = -180.5 },
-		useTime = 2500,
-		event = 'linden_inventory:cola'
-	},
-
-	['mustard'] = {
-		thirst = 10000,
-		hunger = 10000,
-		animDict = 'mp_player_intdrink',
-		anim = 'loop_bottle',
-		model = 'prop_food_mustard',
-		coords = { x = 0.01, y = 0.0, z = -0.07 },
-		rotation = { x = 1.0, y = -1.0, z = -1.5 },
-		useTime = 2500,
-		event = 'linden_inventory:mustard'
-	},
-
-	['bandage'] = {
-		animDict = 'missheistdockssetup1clipboard@idle_a',
-		anim = 'idle_a',
-		flags = 49,
-		model = 'prop_rolled_sock_02',
-		coords = { x = -0.14, y = 0.02, z = -0.08 },
-		rotation = { x = -50.0, y = -50.0, z = 0.0 },
-		useTime = 2500,
-		event = 'linden_inventory:bandage'
-	},
-
-	['lockpick'] = {
-		disableMove = true,
-		animDict = 'anim@amb@clubhouse@tutorial@bkr_tut_ig3@',
-		anim = 'machinic_loop_mechandplayer',
-		useTime = 2000,
-		consume = 0,
-		dofirst = 'esx_lockpick:onUse'
-	},
 
 }
